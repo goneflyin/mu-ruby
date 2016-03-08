@@ -1,0 +1,31 @@
+AllCops:
+  Exclude:
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - 'log/**/*'
+    - 'lib/mu/logger/version.rb'
+    - '*.gemspec'
+
+#Metrics/ClassLength:
+#  Max: 110
+#
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/LineLength:
+  Max: 130
+Metrics/MethodLength:
+  Max: 30
+
+#Metrics/ModuleLength:
+#  Max: 300
+#
+#Metrics/CyclomaticComplexity:
+#  Max: 15
+#
+#Metrics/PerceivedComplexity:
+#  Max: 15
+#
+Documentation:
+  Enabled: false

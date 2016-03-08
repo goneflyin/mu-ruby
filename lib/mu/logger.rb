@@ -8,7 +8,7 @@ VALID_RUBY_CONST = /\A[A-Z][a-zA-Z_]*\Z/
 
 module Mu
   class Logger
-    LEVELS = %w{debug info warn error fatal}
+    LEVELS = %w(debug info warn error fatal).freeze
 
     LEVELS.each do |method|
       define_method(method.to_sym) do |event, data = {}, &block|
@@ -55,8 +55,8 @@ module Mu
     end
 
     def log_event(method, event, data = {})
-      extra = {'event' => event }
-      (Hash === data) ? extra.merge!(data) : extra['message'] = data
+      extra = { 'event' => event }
+      data.is_a?(Hash) ? extra.merge!(data) : extra['message'] = data
 
       if block_given?
         t0 = now
@@ -84,23 +84,23 @@ module Mu
 
     MAX_NESTED_LEVELS = 7
 
-    def prefix_and_flatten_hash(hash, prefix='', level=1)
+    def prefix_and_flatten_hash(hash, prefix = '', level = 1)
       if level > MAX_NESTED_LEVELS
         return { "#{prefix}TRUNCATED" => "data nested deeper than #{MAX_NESTED_LEVELS} levels has been truncated" }
       end
 
-      hash.inject({}) {|ret,(k,v)|
+      hash.inject({}) do |ret, (k, v)|
         key = prefix + k.to_s
-        if Hash === v
-        then ret.merge(prefix_and_flatten_hash(v, key+'.', level+1))
+        if v && v.is_a?(Hash)
+        then ret.merge(prefix_and_flatten_hash(v, key + '.', level + 1))
         else ret.merge(key => v)
         end
-      }
+      end
     end
 
     class RubyCompatibleLogger < Mu::Logger
       LEVELS.each do |method|
-        define_method(method.to_sym) do |data={}, &block|
+        define_method(method.to_sym) do |data = {}, &block|
           log_event(method.to_sym, @event, data, &block)
         end
       end

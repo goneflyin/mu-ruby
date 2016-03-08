@@ -94,13 +94,13 @@ describe Mu::Logger do
   it 'outputs limited flattened JSON event format when given a data payload with nested hashes' do
     logger.info('event_name', overly_nested_data)
     expect_log :info, 'event_name', 'a' => 1,
-               'n.a' => 2,
-               'n.n.a' => 3,
-               'n.n.n.a' => 4,
-               'n.n.n.n.a' => 5,
-               'n.n.n.n.n.a' => 6,
-               'n.n.n.n.n.n.a' => 7,
-               'n.n.n.n.n.n.n.TRUNCATED' => 'data nested deeper than 7 levels has been truncated'
+                                    'n.a' => 2,
+                                    'n.n.a' => 3,
+                                    'n.n.n.a' => 4,
+                                    'n.n.n.n.a' => 5,
+                                    'n.n.n.n.n.a' => 6,
+                                    'n.n.n.n.n.n.a' => 7,
+                                    'n.n.n.n.n.n.n.TRUNCATED' => 'data nested deeper than 7 levels has been truncated'
   end
 
   it 'outputs JSON event format with message when given a string' do
@@ -115,9 +115,9 @@ describe Mu::Logger do
     end
 
     it 'adds exception data to the event and re-raises the exception' do
-      expect {
+      expect do
         logger.info('error_event', extra: 1) { raise StandardError, 'boom' }
-      }.to raise_error(StandardError)
+      end.to raise_error(StandardError)
 
       expect_log :info, 'error_event',
                  'extra' => 1, 'exception' => %w(StandardError boom), 'duration' => 0.0
@@ -137,7 +137,8 @@ describe Mu::Logger do
   describe 'its logger' do
     it "sets the default log level to ENV['LOG_LEVEL']" do
       begin
-        orig, ENV['LOG_LEVEL'] = ENV['LOG_LEVEL'], 'warn'
+        orig = ENV['LOG_LEVEL']
+        ENV['LOG_LEVEL'] = 'warn'
         expect(logger.level).to eql(Logger::WARN)
       ensure
         ENV['LOG_LEVEL'] = orig
@@ -164,7 +165,8 @@ describe Mu::Logger do
   describe 'log formatting' do
     it 'should use colored logging with LOG_FORMAT=colored' do
       begin
-        orig, ENV['LOG_FORMAT'] = ENV['LOG_FORMAT'], 'colored'
+        orig = ENV['LOG_FORMAT']
+        ENV['LOG_FORMAT'] = 'colored'
         logger.info('an_event', datum: 'value')
         expect_colored_log(:info, 'an_event', datum: 'value')
       ensure

@@ -27,17 +27,17 @@ module Mu
     @_logger = logger
   end
 
-  def self.report_error(e)
+  def self.report_error(_e)
     # TODO: Add call to abstraction for reporting service
-    raise NotImplementedError.new
+    raise NotImplementedError, 'Abstraction for reporting errors not yet implemented.'
   end
 
-  def self.report_error!(e)
+  def self.report_error!(_e)
     # TODO: Add call to abstraction for reporting service
-    raise NotImplementedError.new
+    raise NotImplementedError, 'Abstraction for reporting errors not yet implemented.'
   end
 
-  def self.init(app=nil)
+  def self.init(app = nil)
     self.app = app if app
 
     # Dotenv gives precedence to files loaded earlier in the list

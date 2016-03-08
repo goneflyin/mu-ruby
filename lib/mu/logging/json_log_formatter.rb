@@ -7,7 +7,7 @@ module Mu
     end
 
     class JsonLogFormatter
-      def self.format_log(severity, datetime, progname, data)
+      def self.format_log(_severity, datetime, _progname, data)
         json = {
           '@timestamp' => datetime.iso8601(3),
           app: Mu.app,
