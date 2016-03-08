@@ -1,4 +1,5 @@
 require 'mu/version'
+require 'mu/logger'
 require 'dotenv'
 
 module Mu
@@ -19,13 +20,11 @@ module Mu
   end
 
   def self.logger
-    # TODO: Add call to abstraction for reporting service
-    raise NotImplementedError.new
+    @_logger ||= Mu::Logger.new(STDOUT)
   end
 
   def self.logger=(logger)
-    # TODO: Add call to abstraction for reporting service
-    raise NotImplementedError.new
+    @_logger = logger
   end
 
   def self.report_error(e)
